@@ -1214,7 +1214,7 @@ public class mainFrame extends javax.swing.JFrame {
         if(f.isDirectory()) {
             System.out.println("[SmartExtract]: File is a directory, adding to recursive queue");
             for(File file : f.listFiles()) {
-                smartExtract(file, destination+file.getName());
+                smartExtract(file, destination);
             }
         }
         else {
