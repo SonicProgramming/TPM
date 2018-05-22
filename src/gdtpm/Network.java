@@ -24,8 +24,7 @@ class Network {
         mainFrame.appendToPane(mainFrame.jTextPane1, str, col);
     }    
     static Socket cliSock;
-    //IMMEDIATELY report an issue on github in case i accidentally leave the loopback address as the server adress
-    static InetSocketAddress server = new InetSocketAddress("127.0.0.1", 65531);   //IP and port of my server. Warning! I do NOT own the host! 
+    static InetSocketAddress server = new InetSocketAddress("84.22.115.98", 65531);   //IP and port of my server. Warning! I do NOT own the host! 
     
     //Code 1000
     public static boolean isOnline(){
