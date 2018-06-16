@@ -2,6 +2,7 @@ package libgd;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * @author Sonic
@@ -38,6 +39,39 @@ public class TexturePack implements Serializable {
         gameVersion = ver;
         downloadURL = durl;
         packSize = size;
+    }
+    
+    @Override
+    public int hashCode(){
+        String cnv = String.valueOf(id);
+        return Integer.parseInt(cnv.substring((cnv.length()-1)/2));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TexturePack other = (TexturePack) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (Float.floatToIntBits(this.gameVersion) != Float.floatToIntBits(other.gameVersion)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.downloadURL, other.downloadURL)) {
+            return false;
+        }
+        return true;
     }
     
     public String getName(){
