@@ -5,7 +5,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
@@ -31,6 +30,7 @@ class Network {
         boolean isOnline = false;
         try {
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             DataOutputStream dos = new DataOutputStream(cliSock.getOutputStream());
             dos.writeInt(1000);
@@ -49,6 +49,7 @@ class Network {
             atlp("\nStarted code 100\n", Color.BLUE);
             
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             
@@ -82,6 +83,7 @@ class Network {
         try {
             atlp("\nStarted code 200\n", Color.BLUE);
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             DataInputStream dis = new DataInputStream(cliSock.getInputStream());
@@ -113,6 +115,7 @@ class Network {
         try {
             atlp("\nStarted code 300\n", Color.BLUE);
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             ObjectInputStream ois = new ObjectInputStream(cliSock.getInputStream());
@@ -138,6 +141,7 @@ class Network {
         try {
             atlp("\nStarted code 400\n", Color.BLUE);
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             DataInputStream dis = new DataInputStream(cliSock.getInputStream());
@@ -167,6 +171,7 @@ class Network {
         try {
             atlp("\nStarted code 500\n", Color.BLUE);
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             ObjectInputStream ois = new ObjectInputStream(cliSock.getInputStream());
@@ -197,6 +202,7 @@ class Network {
         try {
             atlp("\nStarted code 600\n", Color.BLUE);
             cliSock = new Socket();
+            cliSock.setSoTimeout(5000);
             cliSock.connect(server);
             atlp("Connected\n", Color.BLUE);
             DataOutputStream dos = new DataOutputStream(cliSock.getOutputStream());
