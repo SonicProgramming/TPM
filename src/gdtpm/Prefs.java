@@ -12,8 +12,17 @@ class Prefs implements Serializable {
     //Just settings
     protected String cacheFolder = "";
     protected String gameFolder = "";
+    protected String serverAddress = "";
+    /**
+     * @deprecated 
+     */
     public Prefs(String cache, String game){
         this.cacheFolder = cache;
         this.gameFolder = game;
+    }
+    public Prefs(String cache, String game, String server){
+        this.cacheFolder = cache;
+        this.gameFolder = game;
+        this.serverAddress = server;
     }
 }

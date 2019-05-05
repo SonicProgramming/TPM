@@ -35,6 +35,7 @@ import zip4j.exception.ZipException;
 /**
  * @author Sonic
  */
+//Btw this name is a typo that i'm too lazy to fix
 public class mainFrame extends javax.swing.JFrame {
 
     static boolean isEqual = false;
@@ -130,6 +131,11 @@ public class mainFrame extends javax.swing.JFrame {
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         dTimestamp = new javax.swing.JTextField();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jButton12 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -640,6 +646,19 @@ public class mainFrame extends javax.swing.JFrame {
 
         dTimestamp.setText("Timestamp");
 
+        jLabel3.setText("Server address: ");
+
+        jTextField2.setText("148.251.136.19");
+
+        jButton12.setText("Update server address");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Note: if you have troubles connecting to server update server address manually in settings");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -648,6 +667,7 @@ public class mainFrame extends javax.swing.JFrame {
             .addComponent(jSeparator2)
             .addComponent(jSeparator3)
             .addComponent(jSeparator4)
+            .addComponent(jSeparator5)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -672,14 +692,22 @@ public class mainFrame extends javax.swing.JFrame {
                             .addComponent(dID)
                             .addComponent(dPack)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel25)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jButton10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dTimestamp)))
+                        .addComponent(dTimestamp))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel25)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5)))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -715,7 +743,16 @@ public class mainFrame extends javax.swing.JFrame {
                     .addComponent(jButton10)
                     .addComponent(jButton11)
                     .addComponent(dTimestamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField2)
+                        .addComponent(jButton12)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Debug", jPanel5);
@@ -785,6 +822,15 @@ public class mainFrame extends javax.swing.JFrame {
             
         if(!Network.isOnline()) {
             JOptionPane.showMessageDialog(rootPane, "Could not connect to server!");
+            if(JOptionPane.showConfirmDialog(rootPane, "Looks like server is down.\nRepair?", "Error", JOptionPane.ERROR_MESSAGE) == 0) {
+                if(Network.updateServerAddress()) {
+                    if(Network.isOnline()) {
+                        JOptionPane.showMessageDialog(rootPane, "Repair succeeded", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Repair failed. Message me on twitter @SonicProgrammi1 or GitHub", "Fail", JOptionPane.ERROR_MESSAGE);
+                }
+            }
             break aber;
         }
             
@@ -1054,6 +1100,11 @@ public class mainFrame extends javax.swing.JFrame {
         else jButton4.setEnabled(false);
     }//GEN-LAST:event_jTable2MousePressed
 
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        Network.updateServerAddress();
+        jTextField2.setText(Manager.serverAddress);
+    }//GEN-LAST:event_jButton12ActionPerformed
+
     private void paintPreviewImage(BufferedImage img){
         //jPanel1.paintImage(img, this.getGraphics());
     }
@@ -1112,6 +1163,7 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1136,7 +1188,9 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu2;
@@ -1158,10 +1212,12 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private static javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     public static javax.swing.JTextPane jTextPane1;
     private javax.swing.JLabel sAuthL;
     private javax.swing.JLabel sGVL;

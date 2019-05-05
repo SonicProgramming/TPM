@@ -16,4 +16,5 @@ class Manager {
     protected static boolean fullyLoaded = false;
     protected static String gameFolder = "";
     protected static File tpMeta = new File("");
+    protected static String serverAddress = "148.251.136.19";
 }

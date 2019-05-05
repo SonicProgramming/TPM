@@ -34,11 +34,15 @@ public class SettingsFrame extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
 
         jFileChooser1.setCurrentDirectory(new java.io.File("C:\\"));
             jFileChooser1.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
             setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            setTitle("Settings");
             setResizable(false);
             addWindowListener(new java.awt.event.WindowAdapter() {
                 public void windowOpened(java.awt.event.WindowEvent evt) {
@@ -78,6 +82,25 @@ public class SettingsFrame extends javax.swing.JFrame {
                 }
             });
 
+            jLabel3.setText("Server address:");
+
+            jTextField3.setText("148.251.136.19");
+            jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+                public void keyReleased(java.awt.event.KeyEvent evt) {
+                    jTextField3KeyReleased(evt);
+                }
+                public void keyTyped(java.awt.event.KeyEvent evt) {
+                    jTextField3KeyTyped(evt);
+                }
+            });
+
+            jButton4.setText("Check");
+            jButton4.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -86,6 +109,12 @@ public class SettingsFrame extends javax.swing.JFrame {
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -115,7 +144,12 @@ public class SettingsFrame extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton2))
-                    .addGap(18, 18, 18)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jButton3)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
@@ -126,6 +160,7 @@ public class SettingsFrame extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         jTextField1.setText(Manager.gameFolder);
         jTextField2.setText(Manager.packageCache.getAbsolutePath());
+        jTextField3.setText(Manager.serverAddress);
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -166,8 +201,11 @@ public class SettingsFrame extends javax.swing.JFrame {
         try {
             Manager.gameFolder = jTextField1.getText();
             Manager.packageCache = new File(jTextField2.getText());
+            if(!Manager.serverAddress.equals(jTextField3.getText())) {
+                Manager.serverAddress = jTextField3.getText();
+            }
             oos = new ObjectOutputStream(new FileOutputStream(System.getProperty("user.dir") + "/prefs"));
-            oos.writeObject(new Prefs(jTextField2.getText(), jTextField1.getText()));
+            oos.writeObject(new Prefs(jTextField2.getText(), jTextField1.getText(), jTextField3.getText().replaceAll(" ", "")));
             oos.close();
             JOptionPane.showMessageDialog(rootPane, "Setting saved");
             this.dispose();
@@ -182,6 +220,27 @@ public class SettingsFrame extends javax.swing.JFrame {
         jTextField2.setText(chDir.getAbsolutePath());
         jButton3.setEnabled(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String oldAdd = Manager.serverAddress;
+        Manager.serverAddress = jTextField3.getText();
+        Network.init();
+        if(Network.isOnline()) {
+            JOptionPane.showMessageDialog(rootPane, "Server is online", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Server is offline", "Fail", JOptionPane.ERROR_MESSAGE);
+        }
+        Manager.serverAddress = oldAdd;
+        Network.init();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        
+    }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        jButton3.setEnabled(!jTextField3.getText().equals(Manager.serverAddress));
+    }//GEN-LAST:event_jTextField3KeyReleased
     
     /**
      * @param args the command line arguments
@@ -220,10 +279,13 @@ public class SettingsFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }

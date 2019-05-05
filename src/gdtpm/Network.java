@@ -4,12 +4,16 @@ import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import libgd.TexturePack;
@@ -19,27 +23,53 @@ import libgd.TexturePack;
  */
 class Network {
     
+    //Append To Log Pane
     protected static void atlp(String str, Color col){
         mainFrame.appendToPane(mainFrame.jTextPane1, str, col);
     }    
     static Socket cliSock;
-    static InetSocketAddress server = new InetSocketAddress("84.22.115.98", 65531);   //IP and port of my server. Warning! I do NOT own the host! 
+    static InetSocketAddress server;
+    static {
+        init();
+    }
+    
+    //Finally i found how to use this
+    public static void init() {
+        server = new InetSocketAddress(Manager.serverAddress, 65531);   //IP and port of my server. Warning! I DO (now) own the host! 
+    }
+    
+    public static boolean updateServerAddress() {
+        try {
+            //Using gist.github.com as a reliable way to store a text value
+            String addressURL = "https://gist.githubusercontent.com/SonicProgramming/8e815e4e014f17881462c99fac48a7f8/raw/3bf97e546bdce551153413cd2d5774a8f383400d/GDTPM_server_address.txt";
+            URL url = new URL(addressURL);
+            URLConnection conn = url.openConnection();
+            InputStream is = conn.getInputStream();            
+            String address = new Scanner(is).useDelimiter("\\A").next();
+            atlp("Server address should be " + address + "\n", Color.orange);
+            Manager.serverAddress = address;
+            init();
+            atlp("Server address updated\n", Color.green);
+            return true;
+        } catch (IOException ex) {
+            Logger.getLogger(Network.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     
     //Code 1000
     public static boolean isOnline(){
-        boolean isOnline = false;
         try {
             cliSock = new Socket();
-            cliSock.setSoTimeout(5000);
-            cliSock.connect(server);
+            cliSock.setSoTimeout(1000);
+            cliSock.connect(server, 1000);
             DataOutputStream dos = new DataOutputStream(cliSock.getOutputStream());
             dos.writeInt(1000);
-            isOnline = true;
             cliSock.close();
         } catch (IOException ex) {
-            isOnline = false;
+            return false;
         }
-        return isOnline;
+        return true; 
     }
     
     //Code 100
@@ -244,10 +274,6 @@ class Network {
             Logger.getLogger(Network.class.getName()).log(Level.SEVERE, null, ex);
             atlp("Caught "+ex.toString()+"\nMsg: "+ex.getMessage()+"\n\n", Color.RED);
         }
-    }
-    
-    //Unnecessary, kept for future needs
-    public static void init(){
     }
     
 }
